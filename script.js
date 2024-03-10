@@ -76,7 +76,7 @@ holdEl.addEventListener("click", () => {
       ? (score0El.innerHTML = score[activePlayer])
       : (score1El.innerHTML = score[activePlayer]);
 
-    if (score[activePlayer] >= 10) {
+if (score[activePlayer] >= 50) {
       playing = false;
       diceEl.classList.add("hide");
       document.querySelectorAll(".current").forEach((el) => {

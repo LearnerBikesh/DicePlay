@@ -134,6 +134,7 @@ main {
 }
 
 .btn--new {
+  left: 88%;
   top: 4rem;
 }
 .btn--roll {
