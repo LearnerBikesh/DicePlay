@@ -35,7 +35,7 @@ const init = function () {
   });
   btnRollEl.classList.remove("hide");
   holdEl.classList.remove("hide");
-
+  imgEl.classList.add("hide");
   player0El.classList.remove("player--winner");
   player1El.classList.remove("player--winner");
   player0El.classList.add("player--active");
@@ -56,13 +56,19 @@ const switchPlayer = function () {
 // user roll dice
 btnRollEl.addEventListener("click", () => {
   if (playing) {
+    imgEl.classList.remove("hide");
     current = random();
     currentTotal += current;
+
     imgEl.src = `dice-${current}.png`;
     if (current != 1) {
       activePlayer == 0
         ? (current0El.innerHTML = currentTotal)
         : (current1El.innerHTML = currentTotal);
+
+      // checking win here , because if the current total is higher than final score then player will win
+      win(score[activePlayer] + currentTotal);
+      return;
     } else {
       switchPlayer();
     }
@@ -76,25 +82,31 @@ holdEl.addEventListener("click", () => {
       ? (score0El.innerHTML = score[activePlayer])
       : (score1El.innerHTML = score[activePlayer]);
 
-if (score[activePlayer] >= 50) {
-      playing = false;
-      diceEl.classList.add("hide");
-      document.querySelectorAll(".current").forEach((el) => {
-        el.classList.add("hide");
-      });
-      btnRollEl.classList.add("hide");
-      holdEl.classList.add("hide");
-      document
-        .querySelector(`.player--${activePlayer}`)
-        .classList.add("player--winner");
-      document
-        .querySelector(`.player--${activePlayer}`)
-        .classList.remove("player--active");
+    // checking win condition
+    win(score[activePlayer]);
 
-      document.querySelector(".player--winner .score").innerHTML = "🥇";
-    }
     switchPlayer();
   }
 });
+
+function win(currentScore) {
+  if (currentScore >= 50) {
+    playing = false;
+    diceEl.classList.add("hide");
+    document.querySelectorAll(".current").forEach((el) => {
+      el.classList.add("hide");
+    });
+    btnRollEl.classList.add("hide");
+    holdEl.classList.add("hide");
+    document
+      .querySelector(`.player--${activePlayer}`)
+      .classList.add("player--winner");
+    document
+      .querySelector(`.player--${activePlayer}`)
+      .classList.remove("player--active");
+
+    document.querySelector(".player--winner .score").innerHTML = "🥇";
+  }
+}
 
 newEl.addEventListener("click", init);
